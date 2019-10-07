@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{3d9c0d76-8493-4068-9ed2-dcaeff71b8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn">
+      <UniqueIdentifier>{d08826d8-001a-4067-b18c-c92c9de9d600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn\ryoji">
+      <UniqueIdentifier>{eb03b507-9f1c-4b34-87f0-67e6c6c740e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn\yuu">
+      <UniqueIdentifier>{6c75631f-c8c1-4582-b652-ab228a07c48d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app">
+      <UniqueIdentifier>{9f992766-5b75-4719-9768-4eae7a9e2d28}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\cmn\ryoji\fixed_floats.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\grid2d.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\rect.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\vector.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\aabb.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\collision.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\common.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\easing.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\time.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\utils.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\surface_shelf.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\texture_manager.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\texture_shelf.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\constants.h">
+      <Filter>src\cmn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\root.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\cmn\yuu\time.cpp">
+      <Filter>src\cmn\yuu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cmn\yuu\utils.cpp">
+      <Filter>src\cmn\yuu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\root.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\app">
+      <UniqueIdentifier>{9cfdcbfb-2b7e-4307-8057-c25c3dac8819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\game">
+      <UniqueIdentifier>{d23d275a-634e-4b3f-adf0-3d74189ed56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn">
+      <UniqueIdentifier>{101b93ac-26b7-4c74-8da2-d4902c2d73bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn\ryoji">
+      <UniqueIdentifier>{c96dc478-62a7-4b65-a8b6-5f76206ff6cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmn\yuu">
+      <UniqueIdentifier>{7c026c77-e4c5-4393-a416-45a75b5692c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\game\components">
+      <UniqueIdentifier>{eb1137a7-38b6-407f-a817-369d5fe50620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\game\systems">
+      <UniqueIdentifier>{0b46fd61-c2f9-4826-a660-52806cc48ed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\splash">
+      <UniqueIdentifier>{a94e95cb-6b98-4b72-b726-394d1b404a86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\game\shared">
+      <UniqueIdentifier>{95aa5139-7297-4b1b-9a52-6ea662b943c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app\menu">
+      <UniqueIdentifier>{9b24b8fc-aad2-46ef-be59-c260d3ceb107}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\root.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cmn\yuu\time.cpp">
+      <Filter>src\cmn\yuu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cmn\entt.h">
+      <Filter>src\cmn</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_renderer.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cmn\yuu\utils.cpp">
+      <Filter>src\cmn\yuu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\splash\state.cpp">
+      <Filter>src\app\splash</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\state.cpp">
+      <Filter>src\app\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\shared\shared_keyboard.cpp">
+      <Filter>src\app\game\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_physics.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_animation.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_debug.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_collision.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_player.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\menu\state.cpp">
+      <Filter>src\app\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\shared\shared_animation_indices.cpp">
+      <Filter>src\app\game\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\shared\shared_score.cpp">
+      <Filter>src\app\game\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\shared\shared_spawner.cpp">
+      <Filter>src\app\game\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\game\systems\sys_ai.cpp">
+      <Filter>src\app\game\systems</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\root.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\easing.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\vector.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\time.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\constants.h">
+      <Filter>src\cmn</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\common.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\rect.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_animation.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_renderable.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_transform.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\fixed_floats.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\utils.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\types.h">
+      <Filter>src\app\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\splash\types.h">
+      <Filter>src\app\splash</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\state_base.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\splash\state.h">
+      <Filter>src\app\splash</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\state.h">
+      <Filter>src\app\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\types.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\splash\rect_data.h">
+      <Filter>src\app\splash</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\shared\shared_keyboard.h">
+      <Filter>src\app\game\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_character_animation.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_player.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_obstacle.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_box_collider.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\aabb.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\ryoji\grid2d.h">
+      <Filter>src\cmn\ryoji</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_renderer.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_physics.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_animation.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_debug.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_collision.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_constant_force.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_collectible.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_player.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\menu\state.h">
+      <Filter>src\app\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\menu\types.h">
+      <Filter>src\app\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cmn\yuu\texture_manager.h">
+      <Filter>src\cmn\yuu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\shared\shared_animation_indices.h">
+      <Filter>src\app\game\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\shared\shared_spawner.h">
+      <Filter>src\app\game\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\shared\shared_score.h">
+      <Filter>src\app\game\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_enemy.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\systems\sys_ai.h">
+      <Filter>src\app\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\shared\shared_textures.h">
+      <Filter>src\app\game\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\game\components\com_rigidbody.h">
+      <Filter>src\app\game\components</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
