@@ -41,11 +41,16 @@ Board.prototype.init = function(game) {
             
             let sprite = game.add.sprite(0, 0, puzzlePieceKey);
             //sprite.setOrigin(1/6 * c, 1/6 * r);
-            sprite.setPosition(position.x, position.y)
+            sprite.setPosition(position.x, position.y);
+            sprite.setSize(this.pieceWidth, this.pieceHeight);
             sprite.id = index++;
             sprite.setCrop(c * this.pieceWidth, r * this.pieceHeight, this.pieceWidth, this.pieceHeight);
-            sprite.setDisplaySize(this.pieceWidth, this.pieceHeight);
-            sprite.setInteractive();
+            //sprite.setDisplaySize(this.pieceWidth, this.pieceHeight);
+            sprite.setInteractive(
+                new Phaser.Geom.Rectangle(c * this.pieceWidth, r * this.pieceHeight,this.pieceWidth,this.pieceHeight), 
+                Phaser.Geom.Rectangle.Contains
+            );
+            
             sprite.on('pointerdown', function(pointer) {
                 console.log("Hello: " + sprite.id);
             });
