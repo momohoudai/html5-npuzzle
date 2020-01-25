@@ -1,4 +1,5 @@
-﻿var config = {
+﻿
+var config = {
     type: Phaser.AUTO,
     width: 600,
     height: 800,
@@ -7,17 +8,18 @@
         create: create
     }
 };
+var board = new Board(config.width * 0.5, config.height * 0.375, 3, 3, 13);
 
-var game = new Phaser.Game(config);
 
 function preload()
 {
-    this.load.setBaseURL('./');
-    this.load.image('board', 'assets/gameboard.png');
+    board.load(this);
 }
 
 function create()
 {
-    this.add.image(0,0, 'board');
-
+    board.init(this)
 }
+
+
+new Phaser.Game(config);

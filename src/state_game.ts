@@ -70,19 +70,7 @@ class StateGame extends Phaser.State {
             this.m_firstPiecePos.y + y * PIECE_WH.y,
         )
     }
-    private draw_debug() {
-
-        if (DEBUG) {
-            let offsetY = 25;
-            this.game.debug.geom(this.m_debugRect, 'rgba(0,0,0,0.5)');
-            this.game.debug.text("Current Array: " + this.m_currentState.state.toString(), 5, offsetY, "rgba(0,255,0,1)");
-            this.game.debug.text("Hole: " + this.m_currentState.hole_index, 5, offsetY += 25, "rgba(0,255,0,1)");
-            this.game.debug.text("Hole Value: " + this.m_currentState.state[this.m_currentState.hole_index], 5, offsetY += 25, "rgba(0,255,0,1)");
-        }
-        else {
-            this.game.debug.reset();
-        }
-    }
+ 
     private reset_puzzle() {
         this.m_currentState = this.m_originState.copy();
         this.m_puzzlePieces = this.m_masterPuzzlePieces.slice();
@@ -114,19 +102,6 @@ class StateGame extends Phaser.State {
     }
 
 
-
-    public preload() {
-        // load images
-        this.game.load.image('button_back', 'assets/button/button_back.png');
-        this.game.load.image('button_reset', 'assets/button/button_reset.png');
-        this.game.load.image('button_solve', 'assets/button/button_solve.png');
-
-
-        for (let i = 0; i <= ART_MAX; ++i) {
-            this.game.load.image('puzzle_' + i, 'assets/puzzle/' + i + '.png');
-        }
-        
-    }
 
     public update() {
         if (this.m_answers && this.m_answers.length > 0) {
@@ -204,10 +179,7 @@ class StateGame extends Phaser.State {
     private create_board() {
         this.m_firstPiecePos = new Phaser.Point(0, 0);
         
-        // debug use
-        this.game.input.keyboard.addKey(Phaser.Keyboard.TILDE).onDown.add(() => { DEBUG = !DEBUG });
-        this.m_debugRect = new Phaser.Rectangle(0, 0, this.game.canvas.width, this.game.canvas.height);
-
+        
         this.generate_puzzle();
 
         // Background

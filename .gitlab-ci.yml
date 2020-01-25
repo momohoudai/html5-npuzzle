@@ -17,7 +17,7 @@ pages:
   script:
     - mkdir .public
     - cp -r * .public
-    - mv .public public
+    - mv .public publicgit
   artifacts:
     paths:
     - public # The built files for Gitlab Pages to serve
