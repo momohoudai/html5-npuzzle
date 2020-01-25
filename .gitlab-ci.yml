@@ -15,9 +15,9 @@ stages:
 pages:
   stage: deploy
   script:
-    - mkdir _public
-    - cp -r * _public
-    - mv _public public
+    - mkdir .public
+    - cp -r * .public
+    - mv .public public
   artifacts:
     paths:
     - public # The built files for Gitlab Pages to serve
