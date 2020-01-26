@@ -27,12 +27,13 @@ Board.prototype.load = function(game) {
 Board.prototype.init = function(game) {
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
-    for (let r = 0; r < this.rows; ++r) {
-        for (let c = 0; c < this.cols; ++c) {
-            
+    //for (let r = 0; r < this.rows; ++r) {
+    //    for (let c = 0; c < this.cols; ++c) {
+            let r = 0;
+            let c = 0;
             let position = (() => {
-                let firstPiecePositionX = this.x - this.puzzleWidth/2 + this.pieceWidth/2;
-                let firstPiecePositionY = this.y - this.puzzleHeight/2 + this.pieceHeight/2;
+                let firstPiecePositionX = this.x - this.puzzleWidth/2;
+                let firstPiecePositionY = this.y - this.puzzleHeight/2;
                 return new Phaser.Geom.Point(
                     firstPiecePositionX + c * this.pieceWidth,
                     firstPiecePositionY + r * this.pieceHeight,
@@ -40,11 +41,11 @@ Board.prototype.init = function(game) {
             })();
             
             let sprite = game.add.sprite(0, 0, puzzlePieceKey);
-            //sprite.setOrigin(1/6 * c, 1/6 * r);
+            sprite.setOrigin(1/3 * c, 1/3 * r); // origin is top left corner of piece
             sprite.setPosition(position.x, position.y);
             sprite.setSize(this.pieceWidth, this.pieceHeight);
             sprite.id = index++;
-            sprite.setCrop(c * this.pieceWidth, r * this.pieceHeight, this.pieceWidth, this.pieceHeight);
+            //sprite.setCrop(c * this.pieceWidth, r * this.pieceHeight, this.pieceWidth, this.pieceHeight);
             //sprite.setDisplaySize(this.pieceWidth, this.pieceHeight);
             sprite.setInteractive(
                 new Phaser.Geom.Rectangle(c * this.pieceWidth, r * this.pieceHeight,this.pieceWidth,this.pieceHeight), 
@@ -67,6 +68,6 @@ Board.prototype.init = function(game) {
             }, this);
             this.m_puzzleGroup.add(sprite);
             this.m_masterPuzzlePieces.push(sprite);*/
-        }
-    }
+    //    }
+    //}
 }
