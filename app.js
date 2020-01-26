@@ -8,7 +8,7 @@ var config = {
         create: create
     }
 };
-var board = new Board(config.width * 0.5, config.height * 0.375, 3, 3, 13);
+var board = new Board(config.width * 0.5, config.height * 0.375, 3, 13);
 
 
 function preload()

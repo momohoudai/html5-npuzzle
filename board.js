@@ -1,8 +1,8 @@
 ﻿
 
-function Board(x, y, r, c, puzzleCount) {
-    this.rows = r;
-    this.cols = c;
+function Board(x, y, size, puzzleCount) {
+    this.rows = size;
+    this.cols = size;
     this.x = x;
     this.y = y;
     this.puzzleWidth = 480;
@@ -10,6 +10,8 @@ function Board(x, y, r, c, puzzleCount) {
     this.pieceWidth = 480 / c;
     this.pieceHeight = 480 / r;
     this.puzzleCount = puzzleCount;
+    this.puzzlePieces = [];
+
 }
 
 Board.prototype.load = function(game) {
@@ -25,12 +27,12 @@ Board.prototype.load = function(game) {
 
 
 Board.prototype.init = function(game) {
+    this.puzzlePieces.length = 0; // clears the array
+
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
-    //for (let r = 0; r < this.rows; ++r) {
-    //    for (let c = 0; c < this.cols; ++c) {
-            let r = 0;
-            let c = 0;
+    for (let r = 0; r < this.rows; ++r) {
+        for (let c = 0; c < this.cols; ++c) {       
             let position = (() => {
                 let firstPiecePositionX = this.x - this.puzzleWidth/2;
                 let firstPiecePositionY = this.y - this.puzzleHeight/2;
@@ -41,12 +43,16 @@ Board.prototype.init = function(game) {
             })();
             
             let sprite = game.add.sprite(0, 0, puzzlePieceKey);
+            sprite.setScale(this.puzzleWidth / sprite.width);
+            
+            // Cropping does not change the position, size and anchor of the sprite.
+            // So we must set those manually to fit the actual sprite size we want...
+            sprite.setCrop(c * this.pieceWidth, r * this.pieceHeight, this.pieceWidth, this.pieceHeight);
             sprite.setOrigin(1/3 * c, 1/3 * r); // origin is top left corner of piece
-            sprite.setPosition(position.x, position.y);
             sprite.setSize(this.pieceWidth, this.pieceHeight);
+            sprite.setPosition(position.x, position.y);
+            
             sprite.id = index++;
-            //sprite.setCrop(c * this.pieceWidth, r * this.pieceHeight, this.pieceWidth, this.pieceHeight);
-            //sprite.setDisplaySize(this.pieceWidth, this.pieceHeight);
             sprite.setInteractive(
                 new Phaser.Geom.Rectangle(c * this.pieceWidth, r * this.pieceHeight,this.pieceWidth,this.pieceHeight), 
                 Phaser.Geom.Rectangle.Contains
@@ -56,7 +62,7 @@ Board.prototype.init = function(game) {
                 console.log("Hello: " + sprite.id);
             });
 
-           
+           this.puzlePiece.push(sprite);
             
             
             // input
@@ -66,8 +72,7 @@ Board.prototype.init = function(game) {
                     this.move_piece(sprite.data);
                 }
             }, this);
-            this.m_puzzleGroup.add(sprite);
-            this.m_masterPuzzlePieces.push(sprite);*/
-    //    }
-    //}
+            this.m_puzzleGroup.add(sprite);*/
+        }
+    }
 }
