@@ -1,5 +1,6 @@
 function NPuzzle() {
     this.state = [];
+    this.originState = [];
     this.width = 0;
     this.holeIndex = 0;
     this.goal = []
@@ -10,8 +11,35 @@ NPuzzle.prototype.init = function(width) {
     this.state.length = 0;
     this.goal.length = 0;
     for (let i = 0; i < width * width; ++i) {
-        this.state.add(i);
-        this.goal.add(i);
+        this.state.push(i);
+        this.originState.push(i);
+        this.goal.push(i);
+    }
+}
+
+NPuzzle.prototype.reset = function() {
+    this.state.length = 0;
+    this.state = this.originState.slice();
+}
+
+NPuzzle.prototype.getHoleValue = function() {
+    return this.state[this.holeIndex];
+}
+
+NPuzzle.prototype.canMove = function(index) {
+    let oneToTwoFn = (idx) => { return [idx % this.width, Math.floor(idx / this.width)]; }
+    let hole2id = oneToTwoFn(this.holeIndex, this.width);
+    let item2id = oneToTwoFn(index, this.width);
+    let diff = [hole2id[0] - item2id[0], hole2id[1] - item2id[1]];
+
+    return (Math.abs(diff[0]) == 0 && Math.abs(diff[1]) == 1) || (Math.abs(diff[1]) == 0 && Math.abs(diff[0]) == 1);
+}
+
+NPuzzle.prototype.move = function(index) {
+    if(this.canMove(index)) {
+        let swapFn = (a,b) => { return [b, a] };
+        [this.state[index], this.state[this.holeIndex]] = swapFn(this.state[index], this.state[this.holeIndex]);
+        this.holeIndex = index;
     }
 }
 
@@ -20,11 +48,11 @@ NPuzzle.prototype.generate = function() {
     let swapFn = (a, b) => { return [b, a]; }
 
 
-    let isSolvableFn = (state, holeINdex) => {
+    let isSolvableFn = (state, holeIndex) => {
         
-        let countInversionsFn = (a, hole_index) => {
+        let countInversionsFn = (a, holeIndex) => {
             let temp = a.slice();
-            temp.splice(hole_index, 1);
+            temp.splice(holeIndex, 1);
             let arr = temp.slice();
 
             let mergeFn = (a, temp, left, mid, right) => {
@@ -62,7 +90,7 @@ NPuzzle.prototype.generate = function() {
             return countInversionsSubFn(arr, temp, 0, arr.length - 1);
         }
         
-        return (countInversionsFn(this.state, holeIndex) % 2 == 0);
+        return (countInversionsFn(state, holeIndex) % 2 == 0);
     }
 
     do {
@@ -76,32 +104,8 @@ NPuzzle.prototype.generate = function() {
             [this.state[randomIndex], this.state[currentIndex]] = swapFn(this.state[randomIndex], this.state[currentIndex]);
         }
     } while (isSolvableFn(this.state, this.holeIndex) == false);
+    this.originState = this.state.slice();
 
 }
 
 
-    // 1d to 2d array 
-    function one_to_two(index: number, w: number): number[] {
-        return [index % w, Math.floor(index / w)];
-    }
-
-
-    // returns an array of contiguous unique shuffled numbers.
-    // [0] is the puzzle
-    // [1] is the goal
-    export function generate_puzzle_and_goal(w: number, h: number): puzzle_state[] {
-        let result: puzzle_state[] = [];
-        let hole_index: number = Math.floor(Math.random() * w * h);
-        let puzzle: puzzle_state = new puzzle_state(get_goal_state(w, h), hole_index, w);       
-
-        do {
-            shuffle(puzzle.state);
-        } while (is_solveble(puzzle.state, puzzle.hole_index) == false);
-
-        result.push(puzzle);
-        
-        let goal: puzzle_state = new puzzle_state(get_goal_state(w, h), puzzle[puzzle.hole_index], w);
-        result.push(goal);
-
-        return result;
-    }
