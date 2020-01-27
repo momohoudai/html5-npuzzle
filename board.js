@@ -19,9 +19,6 @@ function Board(x, y, w, size, puzzleCount) {
     this.npuzzle = new NPuzzle();
     this.movesTaken = 0;
     this.movesTakenText = null;
-    this.movesTakenTextX = this.x + this.w * 0.5;
-    this.movesTakenTextY = this.x + this.h * 0.75;
-
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -58,7 +55,7 @@ Board.prototype.movePiece = function(game, spriteId) {
         let oldSpriteY = sprite.y;
         let holeSprite = this.puzzlePieces[this.npuzzle.getHoleValue()];
 
-        //sprite.setPosition(holeSprite.x, holeSprite.y);
+        sprite.setPosition(holeSprite.x, holeSprite.y);
         holeSprite.setPosition(oldSpriteX, oldSpriteY);
         
         this.npuzzle.move(sprite.place);
@@ -67,11 +64,11 @@ Board.prototype.movePiece = function(game, spriteId) {
 
 
 
-        let tween  = game.add.tween(sprite).to({
+        /*let tween  = game.add.tween(sprite).to({
             x: 0,
             y: 0
         }, 400, Phaser.Easing.Cubic.Out, true);
-
+*/
         /*tween.onComplete.add(() => {
             this.m_isAnimating = false;
         });
@@ -140,7 +137,13 @@ Board.prototype.init = function(game) {
     }
 
     // Text
-    this.movesTakenText = game.add.text(this.movesTakenTextX, this.movesTakenTextY, '', { fontFamily: '"Roboto Condensed"' });
+    this.movesTakenText = game.add.text(this.x, this.y + this.h * 0.7, 'Hello', { 
+        fontFamily: 'Verdana',
+        fontSize: this.w * 0.1,
+        align: "center",
+        color: "#ffff00",
+        fixedWidth: this.w - this.x
+    });
 
     // Buttons
 
