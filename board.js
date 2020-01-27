@@ -48,7 +48,7 @@ Board.prototype.load = function(game) {
 }
 
 
-Board.prototype.movePiece = function(spriteId) {
+Board.prototype.movePiece = function(game, spriteId) {
     // find the sprite with the correct index
     let sprite = this.puzzlePieces[spriteId];
     if (this.npuzzle.isMovePossible(sprite.place)) {
@@ -58,7 +58,7 @@ Board.prototype.movePiece = function(spriteId) {
         let oldSpriteY = sprite.y;
         let holeSprite = this.puzzlePieces[this.npuzzle.getHoleValue()];
 
-        sprite.setPosition(holeSprite.x, holeSprite.y);
+        //sprite.setPosition(holeSprite.x, holeSprite.y);
         holeSprite.setPosition(oldSpriteX, oldSpriteY);
         
         this.npuzzle.move(sprite.place);
@@ -67,12 +67,12 @@ Board.prototype.movePiece = function(spriteId) {
 
 
 
-        /*let tween  = this.game.add.tween(sprite).to({
-            x: new_pos.x + BOARD_MARGIN,
-            y: new_pos.y + BOARD_MARGIN,
+        let tween  = game.add.tween(sprite).to({
+            x: 0,
+            y: 0
         }, 400, Phaser.Easing.Cubic.Out, true);
 
-        tween.onComplete.add(() => {
+        /*tween.onComplete.add(() => {
             this.m_isAnimating = false;
         });
         this.m_isAnimating = true;*/
@@ -99,8 +99,8 @@ Board.prototype.checkSolved = function() {
 }
 
 Board.prototype.init = function(game) {
+    // Puzzle Board
     this.puzzlePieces.length = 0; // clears the array
-
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
 
@@ -127,8 +127,8 @@ Board.prototype.init = function(game) {
             
             
             sprite.on('pointerdown', () => {
-                console.log("sprite: id = " + sprite.id + ", p =  " + sprite.place)
-                this.movePiece(sprite.id);
+                //console.log("sprite: id = " + sprite.id + ", p =  " + sprite.place)
+                this.movePiece(game, sprite.id);
             });
 
             // Finally set the size to the appropriate size
@@ -141,6 +141,9 @@ Board.prototype.init = function(game) {
 
     // Text
     this.movesTakenText = game.add.text(this.movesTakenTextX, this.movesTakenTextY, '', { fontFamily: '"Roboto Condensed"' });
+
+    // Buttons
+
 
     this.generate();
 }
