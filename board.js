@@ -11,6 +11,9 @@ function Board(x, y, size, puzzleCount) {
     this.puzzleCount = puzzleCount;
     this.puzzlePieces = [];
     this.npuzzle = new NPuzzle();
+    this.movesTaken = 0;
+    this.movesTakenText = null;
+
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -40,13 +43,20 @@ Board.prototype.load = function(game) {
 Board.prototype.movePiece = function(spriteId) {
     // find the sprite with the correct index
     let sprite = this.puzzlePieces[spriteId];
-    if (this.npuzzle.canMove(sprite.place)) {
-        let holeIndex = this.npuzzle.holeIndex;
-        let holePos = this.getCoordByIndex(this.npuzzle.holeIndex);
+    if (this.npuzzle.isMovePossible(sprite.place)) {
+        // Swap between hole sprite and current sprite
+        let swapFn = (a,b,) => { return [b, a]; }
+        let oldSpriteX = sprite.x;
+        let oldSpriteY = sprite.y;
+        let holeSprite = this.puzzlePieces[this.npuzzle.getHoleValue()];
+
+        sprite.setPosition(holeSprite.x, holeSprite.y);
+        holeSprite.setPosition(oldSpriteX, oldSpriteY);
         
-        sprite.setPosition(holePos.x, holePos.y);
         this.npuzzle.move(sprite.place);
-        sprite.place = holeIndex;
+        
+        [sprite.place, holeSprite.place] = swapFn(sprite.place, holeSprite.place);
+
 
 
         /*let tween  = this.game.add.tween(sprite).to({
@@ -66,12 +76,19 @@ Board.prototype.movePiece = function(spriteId) {
         //[this.m_currentState.hole_index, sprite.data] = Helper.swap(this.m_currentState.hole_index, sprite.data);
         //[this.m_puzzlePieces[this.m_currentState.hole_index], this.m_puzzlePieces[sprite.data]] = Helper.swap(this.m_puzzlePieces[this.m_currentState.hole_index], this.m_puzzlePieces[sprite.data]);        
 
-        //++this.m_movesTaken;
-        //this.updateText();
-     }
+        this.setMovesTaken(++this.movesTaken);
+        this.checkSolved();
+    }
 } 
 
-
+Board.prototype.checkSolved = function() {
+    if (this.npuzzle.isSolved()) {
+        this.puzzlePieces[this.npuzzle.getHoleValue()].setAlpha(1);
+        // disable interaction for all sprites
+        for (let piece of this.puzzlePieces)
+            piece.disableInteractive();
+    }
+}
 
 Board.prototype.init = function(game) {
     this.puzzlePieces.length = 0; // clears the array
@@ -113,12 +130,16 @@ Board.prototype.init = function(game) {
             ++index;
         }
     }
+
+    // Text
+    this.movesTakenText = game.add.text(this.x, this.y, '', { fontFamily: '"Roboto Condensed"' });
+
     this.generate();
 }
 
 Board.prototype.generate = function() {
     this.npuzzle.init(this.size)
-    this.npuzzle.generate();
+    this.npuzzle.generateSimple();
     console.log(this.npuzzle);;
     this.reset();
 }
@@ -141,9 +162,10 @@ Board.prototype.reset = function() {
        sprite.place = i;
     }
 
-    /*
-    this.m_movesTaken = 0;
-    this.updateText();
-    */
+    this.setMovesTaken(0);
+}
 
+
+Board.prototype.setMovesTaken = function(n) {
+    this.movesTakenText.text = "Moves: " + n;
 }

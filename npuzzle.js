@@ -22,11 +22,19 @@ NPuzzle.prototype.reset = function() {
     this.state = this.originState.slice();
 }
 
+NPuzzle.prototype.isSolved = function() {
+    for (let i = 0; i < this.width * this.width; ++i) {
+        if (this.state[i] !== this.goal[i]) 
+            return false;
+    }
+    return true;
+}
+
 NPuzzle.prototype.getHoleValue = function() {
     return this.state[this.holeIndex];
 }
 
-NPuzzle.prototype.canMove = function(index) {
+NPuzzle.prototype.isMovePossible = function(index) {
     let oneToTwoFn = (idx) => { return [idx % this.width, Math.floor(idx / this.width)]; }
     let hole2id = oneToTwoFn(this.holeIndex, this.width);
     let item2id = oneToTwoFn(index, this.width);
@@ -36,11 +44,16 @@ NPuzzle.prototype.canMove = function(index) {
 }
 
 NPuzzle.prototype.move = function(index) {
-    if(this.canMove(index)) {
+    if(this.isMovePossible(index)) {
         let swapFn = (a,b) => { return [b, a] };
         [this.state[index], this.state[this.holeIndex]] = swapFn(this.state[index], this.state[this.holeIndex]);
         this.holeIndex = index;
     }
+}
+
+NPuzzle.prototype.generateSimple = function() {
+    this.holeIndex = 8;
+    this.state = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 }
 
 NPuzzle.prototype.generate = function() {
