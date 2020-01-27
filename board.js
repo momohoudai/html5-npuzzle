@@ -1,18 +1,26 @@
 ﻿
 
-function Board(x, y, size, puzzleCount) {
+function Board(x, y, w, size, puzzleCount) {
     this.size = size;
     this.x = x;
     this.y = y;
-    this.puzzleWidth = 480;
-    this.puzzleHeight = 480;
-    this.pieceWidth = 480 / size;
-    this.pieceHeight = 480 / size;
+    this.w = w;
+    this.h = w / 3 * 4; // aspect ratio 3:4
+    
+    this.puzzleWidth = w * 0.8;
+    this.puzzleHeight = this.puzzleWidth;
+    this.pieceWidth = this.puzzleWidth / size;
+    this.pieceHeight = this.puzzleHeight / size;
     this.puzzleCount = puzzleCount;
     this.puzzlePieces = [];
+    this.puzzleX = this.x + this.w * 0.5;
+    this.puzzleY = this.y + this.h * 0.375;
+
     this.npuzzle = new NPuzzle();
     this.movesTaken = 0;
     this.movesTakenText = null;
+    this.movesTakenTextX = this.x + this.w * 0.5;
+    this.movesTakenTextY = this.x + this.h * 0.75;
 
 }
 
@@ -20,8 +28,8 @@ Board.prototype.getCoordByIndex = function(index) {
     let x = index % this.size;
     let y = Math.floor(index / this.size)
     
-    let firstPiecePositionX = this.x - this.puzzleWidth/2;
-    let firstPiecePositionY = this.y - this.puzzleHeight/2;
+    let firstPiecePositionX = this.puzzleX - this.puzzleWidth/2;
+    let firstPiecePositionY = this.puzzleY - this.puzzleHeight/2;
 
     return new Phaser.Geom.Point(
         firstPiecePositionX + x * this.pieceWidth,
@@ -132,7 +140,7 @@ Board.prototype.init = function(game) {
     }
 
     // Text
-    this.movesTakenText = game.add.text(this.x, this.y, '', { fontFamily: '"Roboto Condensed"' });
+    this.movesTakenText = game.add.text(this.movesTakenTextX, this.movesTakenTextY, '', { fontFamily: '"Roboto Condensed"' });
 
     this.generate();
 }
