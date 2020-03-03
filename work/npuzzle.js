@@ -2,6 +2,7 @@ function NPuzzle() {
     this.state = [];
     this.originState = [];
     this.width = 0;
+    this.originHoleIndex = 0;
     this.holeIndex = 0;
     this.goal = []
 }
@@ -20,6 +21,7 @@ NPuzzle.prototype.init = function(width) {
 NPuzzle.prototype.reset = function() {
     this.state.length = 0;
     this.state = this.originState.slice();
+    this.holeIndex = this.originHoleIndex;
 }
 
 NPuzzle.prototype.isSolved = function() {
@@ -52,12 +54,12 @@ NPuzzle.prototype.move = function(index) {
 }
 
 NPuzzle.prototype.generateSimple = function() {
-    this.holeIndex = 8;
+    this.holeIndex = this.originHoleIndex = 8;
     this.state = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 }
 
 NPuzzle.prototype.generate = function() {
-    this.holeIndex = Math.floor(Math.random() * this.width * this.width);
+    this.holeIndex = this.originHoleIndex = Math.floor(Math.random() * this.width * this.width);
     let swapFn = (a, b) => { return [b, a]; }
 
 
