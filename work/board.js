@@ -148,7 +148,6 @@ Board.prototype.init = function(game) {
 
     // Buttons
     let newButton = game.add.sprite(0, 0, 'button_new');
-    newButton.setScale(0.1);
     newButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.5)
     this.generate();
 }
