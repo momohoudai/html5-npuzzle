@@ -5,3 +5,7 @@
 span {
     font-style: italic;
 }
+
+.container {
+    margin: auto;
+}

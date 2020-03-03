@@ -42,6 +42,7 @@ Board.prototype.load = function(game) {
             'assets/puzzle/' + i + '.png'
         )
     }
+    game.load.image('button_new', 'assets/button/button_new.jpg')
 }
 
 
@@ -146,8 +147,9 @@ Board.prototype.init = function(game) {
     });
 
     // Buttons
-
-
+    let newButton = game.add.sprite(0, 0, 'button_new');
+    newButton.setScale(0.1);
+    newButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.5)
     this.generate();
 }
 
