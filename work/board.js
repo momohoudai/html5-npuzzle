@@ -1,6 +1,7 @@
 ﻿
 
-function Board(x, y, w, size, puzzleCount) {
+function Board(game, x, y, w, size, puzzleCount) {
+    this.game = game;
     this.size = size;
     this.x = x;
     this.y = y;
@@ -17,6 +18,7 @@ function Board(x, y, w, size, puzzleCount) {
     this.puzzleY = this.y + this.h * 0.375;
 
     this.npuzzle = new NPuzzle();
+    this.originalPuzzle = new NPuzzle();
     this.movesTaken = 0;
     this.movesTakenText = null;
 }
@@ -34,55 +36,46 @@ Board.prototype.getCoordByIndex = function(index) {
     )
 }
 
-Board.prototype.load = function(game) {
-    game.load.setBaseURL('https://momodevelop.gitlab.io/html5-npuzzle/')    
+Board.prototype.load = function() {
+    this.game.load.setBaseURL('https://momodevelop.gitlab.io/html5-npuzzle/')    
     for (let i = 0; i <= this.puzzleCount; ++i) {
-        game.load.image(
+        this.game.load.image(
             'puzzle_' + i, 
             'assets/puzzle/' + i + '.png'
         )
     }
-    game.load.image('button_new', 'assets/button/button_new.jpg')
+    this.game.load.spritesheet('button_new', 'assets/button/button_new.png', {frameWidth:128,frameHeight:128})
 }
 
 
-Board.prototype.movePiece = function(game, spriteId) {
+Board.prototype.movePiece = function(spriteId) {
     // find the sprite with the correct index
     let sprite = this.puzzlePieces[spriteId];
     if (this.npuzzle.isMovePossible(sprite.place)) {
         // Swap between hole sprite and current sprite
         let swapFn = (a,b,) => { return [b, a]; }
-        let oldSpriteX = sprite.x;
-        let oldSpriteY = sprite.y;
+        let spritePosition = this.getCoordByIndex(sprite.place);
+        let holePosition = this.getCoordByIndex(this.npuzzle.holeIndex);
         let holeSprite = this.puzzlePieces[this.npuzzle.getHoleValue()];
 
-        sprite.setPosition(holeSprite.x, holeSprite.y);
-        holeSprite.setPosition(oldSpriteX, oldSpriteY);
         
+        this.game.scene.scene.tweens.add({
+            targets     : sprite,
+            x           : holePosition.x,
+            y           : holePosition.y,
+            ease        : 'Cubic',
+            duration    : 300,
+        });
+
+        //sprite.setPosition(holeSprite.x, holeSprite.y);
+        holeSprite.setPosition(spritePosition.x, spritePosition.y);
+        console.log(holeSprite.x)
         this.npuzzle.move(sprite.place);
         
         [sprite.place, holeSprite.place] = swapFn(sprite.place, holeSprite.place);
 
 
-
-        /*let tween  = game.add.tween(sprite).to({
-            x: 0,
-            y: 0
-        }, 400, Phaser.Easing.Cubic.Out, true);
-*/
-        /*tween.onComplete.add(() => {
-            this.m_isAnimating = false;
-        });
-        this.m_isAnimating = true;*/
-
-        //update current state
-        //[this.npuzzle.state[sprite.id], this.npuzzle.state[this.m_currentState.hole_index]] = Helper.swap(this.m_currentState.state[sprite.data], this.m_currentState.state[this.m_currentState.hole_index]);
-
-        //update sprite data 
-        //[this.m_currentState.hole_index, sprite.data] = Helper.swap(this.m_currentState.hole_index, sprite.data);
-        //[this.m_puzzlePieces[this.m_currentState.hole_index], this.m_puzzlePieces[sprite.data]] = Helper.swap(this.m_puzzlePieces[this.m_currentState.hole_index], this.m_puzzlePieces[sprite.data]);        
-
-        this.setMovesTaken(++this.movesTaken);
+        this.setMovesTakenText(++this.movesTaken);
         this.checkSolved();
     }
 } 
@@ -96,8 +89,9 @@ Board.prototype.checkSolved = function() {
     }
 }
 
-Board.prototype.init = function(game) {
+Board.prototype.init = function() {
     // Puzzle Board
+    let parent = this;
     this.puzzlePieces.length = 0; // clears the array
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
@@ -105,7 +99,7 @@ Board.prototype.init = function(game) {
     for (let r = 0; r < this.size; ++r) {
         for (let c = 0; c < this.size; ++c) {       
             let position = this.getCoordByIndex(index);
-            let sprite = game.add.sprite(0, 0, puzzlePieceKey);
+            let sprite = this.game.add.sprite(0, 0, puzzlePieceKey);
             sprite.setScale(this.puzzleWidth / sprite.width);
             
             // Cropping does not change the position, size and anchor of the sprite.
@@ -125,7 +119,6 @@ Board.prototype.init = function(game) {
             
             
             sprite.on('pointerdown', () => {
-                //console.log("sprite: id = " + sprite.id + ", p =  " + sprite.place)
                 this.movePiece(game, sprite.id);
             });
 
@@ -138,31 +131,63 @@ Board.prototype.init = function(game) {
     }
 
     // Text
-    this.movesTakenText = game.add.text(this.x, this.y + this.h * 0.7, 'Hello', { 
+    this.movesTakenText = this.game.add.text(this.x, this.y + this.h * 0.7, 'Hello', { 
         fontFamily: 'Verdana',
-        fontSize: this.w * 0.1,
+        fontSize: this.w * 0.075,
         align: "center",
         color: "#ffff00",
         fixedWidth: this.w - this.x
     });
 
     // Buttons
-    let newButton = game.add.sprite(0, 0, 'button_new');
-    newButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.5)
+    let newButton = this.game.add.sprite(0, 0, 'button_new');
+    newButton.setPosition(this.x + this.w * 0.2, this.y + this.h * 0.875)
+    newButton.setInteractive();
+    newButton.on('pointerdown', function() {
+        parent.generate()
+        newButton.setFrame(1)
+    });
+    newButton.on('pointerup', function() {
+        newButton.setFrame(0)
+    });
+    newButton.on('pointerout', function() {
+        newButton.setFrame(0)
+    });
+
+    let resetButton = this.game.add.sprite(0, 0, 'button_new');
+    resetButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.875)
+    resetButton.setInteractive();
+    resetButton.on('pointerdown', function() {
+        parent.reset()
+        resetButton.setFrame(1)
+    });
+    newButton.on('pointerup', function() {
+        resetButton.setFrame(0)
+    });
+    newButton.on('pointerout', function() {
+        resetButton.setFrame(0)
+    });
+
+
     this.generate();
 }
 
 Board.prototype.generate = function() {
     this.npuzzle.init(this.size)
     this.npuzzle.generateSimple();
-    console.log(this.npuzzle);;
-    this.reset();
+    this.syncPuzzleWithBoard();
 }
 
 Board.prototype.reset = function() {
+    this.npuzzle.reset();
+    this.syncPuzzleWithBoard();
+}
+
+Board.prototype.syncPuzzleWithBoard = function() {
+   
     for (let i = 0; i < this.npuzzle.state.length; ++i) {
         let sprite = this.puzzlePieces[this.npuzzle.state[i]];
-
+        
         if (this.npuzzle.getHoleValue() == sprite.id) {
             sprite.disableInteractive();
             sprite.setAlpha(0);
@@ -176,11 +201,11 @@ Board.prototype.reset = function() {
        sprite.setPosition(position.x, position.y);
        sprite.place = i;
     }
-
-    this.setMovesTaken(0);
+    this.movesTaken = 0;
+    this.setMovesTakenText(0);
 }
 
 
-Board.prototype.setMovesTaken = function(n) {
+Board.prototype.setMovesTakenText = function(n) {
     this.movesTakenText.text = "Moves: " + n;
 }

@@ -8,17 +8,18 @@ var config = {
         create: create
     }
 };
-var board = new Board(0, 0, config.width, 3, 13);
+var board
 
 
 function preload()
 {
-    board.load(this);
+    board = new Board(this, 0, 0, config.width, 3, 13);
+    board.load();
 }
 
 function create()
 {
-    board.init(this)
+    board.init()
 }
 
 
