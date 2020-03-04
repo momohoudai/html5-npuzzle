@@ -170,6 +170,21 @@ Board.prototype.init = function() {
     });
 
 
+    let solveButton = this.game.add.sprite(0, 0, 'button_new');
+    solveButton.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
+    solveButton.setInteractive();
+    solveButton.on('pointerdown', function() {
+        parent.reset()
+        solveButton.setFrame(1)
+    });
+    solveButton.on('pointerup', function() {
+        solveButton.setFrame(0)
+    });
+    solveButton.on('pointerout', function() {
+        solveButton.setFrame(0)
+    });
+
+
     this.generate();
 }
 
