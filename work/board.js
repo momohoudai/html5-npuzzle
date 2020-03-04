@@ -49,6 +49,7 @@ Board.prototype.load = function() {
 
 
 Board.prototype.movePiece = function(spriteId) {
+
     // find the sprite with the correct index
     let sprite = this.puzzlePieces[spriteId];
     if (this.npuzzle.isMovePossible(sprite.place)) {
@@ -69,7 +70,6 @@ Board.prototype.movePiece = function(spriteId) {
 
         //sprite.setPosition(holeSprite.x, holeSprite.y);
         holeSprite.setPosition(spritePosition.x, spritePosition.y);
-        console.log(holeSprite.x)
         this.npuzzle.move(sprite.place);
         
         [sprite.place, holeSprite.place] = swapFn(sprite.place, holeSprite.place);
@@ -91,6 +91,7 @@ Board.prototype.checkSolved = function() {
 
 Board.prototype.init = function() {
     // Puzzle Board
+   
     let parent = this;
     this.puzzlePieces.length = 0; // clears the array
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
@@ -119,7 +120,7 @@ Board.prototype.init = function() {
             
             
             sprite.on('pointerdown', () => {
-                this.movePiece(game, sprite.id);
+                this.movePiece(sprite.id);
             });
 
             // Finally set the size to the appropriate size
