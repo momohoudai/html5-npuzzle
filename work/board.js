@@ -221,7 +221,6 @@ Board.prototype.syncPuzzleWithBoard = function() {
     this.setMovesTakenText(0);
 }
 
-
 Board.prototype.setMovesTakenText = function(n) {
     this.movesTakenText.text = "Moves: " + n;
 }

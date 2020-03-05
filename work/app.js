@@ -3,13 +3,16 @@ var config = {
     type: Phaser.AUTO,
     width: 600,
     height: 800,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     scene: {
         preload: preload,
         create: create
     }
 };
-var board
-
+var board;
 
 function preload()
 {
