@@ -102,7 +102,6 @@ NPuzzle.prototype.generate = function() {
             }
             return countInversionsSubFn(arr, temp, 0, arr.length - 1);
         }
-        console.log("merge: " + countInversionsFn(state, holeIndex));
         return (countInversionsFn(state, holeIndex) % 2 == 0);
     }
 
