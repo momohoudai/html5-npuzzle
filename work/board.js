@@ -25,6 +25,7 @@ function Board(game, x, y, w, size, puzzleCount) {
     // states
     this.isSolving = false;
     this.isAnimating = false;
+    this.answers = []
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -92,7 +93,14 @@ Board.prototype.movePiece = function(spriteId) {
 
 Board.prototype.checkSolved = function() {
     if (this.npuzzle.isSolved()) {
-        this.puzzlePieces[this.npuzzle.getHoleValue()].setAlpha(1);
+        let holePiece = this.puzzlePieces[this.npuzzle.getHoleValue()];
+        this.game.scene.scene.tweens.add({
+            targets     : holePiece,
+            alpha       : 1,
+            ease        : 'Cubic',
+            duration    : 2000,
+        });
+
         // disable interaction for all sprites
         for (let piece of this.puzzlePieces)
             piece.disableInteractive();
@@ -104,40 +112,25 @@ Board.prototype.init = function() {
    
     let parent = this;
     this.puzzlePieces.length = 0; // clears the array
-    let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
 
     for (let r = 0; r < this.size; ++r) {
         for (let c = 0; c < this.size; ++c) {       
-            let position = this.getCoordByIndex(index);
-            let sprite = this.game.add.sprite(0, 0, puzzlePieceKey);
-            sprite.setScale(this.puzzleWidth / sprite.width);
             
+            let sprite = this.game.add.sprite(0, 0);
             // Cropping does not change the position, size and anchor of the sprite.
             // So we must set those manually to fit the actual sprite size we want...
             let rect = new Phaser.Geom.Rectangle(c * sprite.width / this.size, r * sprite.height / this.size, sprite.width / this.size, sprite.height / this.size);
-            sprite.setCrop(rect.x, rect.y, rect.width, rect.height);
-            sprite.setOrigin(1/3 * c, 1/3 * r); // origin is top left corner of piece
-            
-            sprite.setPosition(position.x, position.y);
-            
             sprite.id = index;
             sprite.place = index;
-            sprite.setInteractive(
-                rect,
-                Phaser.Geom.Rectangle.Contains
-            );
-            
+  
             
             sprite.on('pointerdown', () => {
                 if (this.isSolving == false)
                     this.movePiece(sprite.id);
             });
 
-            // Finally set the size to the appropriate size
-            sprite.setSize(this.pieceWidth, this.pieceHeight);
             this.puzzlePieces.push(sprite);
-
             ++index;
         }
     }
@@ -161,6 +154,7 @@ Board.prototype.init = function() {
     newButton.on('pointerup', function() {
         parent.generate();
         parent.isSolving = false;
+        parent.answers.length = 0;
         newButton.setFrame(0)
     });
     newButton.on('pointerout', function() {
@@ -171,12 +165,12 @@ Board.prototype.init = function() {
     resetButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.875)
     resetButton.setInteractive();
     resetButton.on('pointerdown', function() {
-        parent.reset()
         resetButton.setFrame(1)
     });
     resetButton.on('pointerup', function() {
         parent.reset()
         parent.isSolving = false;
+        parent.answers.length = 0;
         resetButton.setFrame(0)
     });
     resetButton.on('pointerout', function() {
@@ -226,6 +220,32 @@ Board.prototype.solve = function() {
 Board.prototype.generate = function() {
     this.npuzzle.init(this.size)
     this.npuzzle.generate();
+    let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
+    let index = 0;
+    let texture = this.game.textures.get(puzzlePieceKey)
+    console.log()
+    for (let r = 0; r < this.size; ++r) {
+        for (let c = 0; c < this.size; ++c) {       
+            let position = this.getCoordByIndex(index);
+            let sprite = this.puzzlePieces[index];
+
+            sprite.width = texture.source[0].width;
+            sprite.height = texture.source[0].height;
+            let rect = new Phaser.Geom.Rectangle(c * sprite.width / this.size, r * sprite.height / this.size, sprite.width / this.size, sprite.height / this.size);
+
+            sprite.setTexture(puzzlePieceKey);
+            sprite.setScale(this.puzzleWidth / sprite.width);
+            sprite.setCrop(rect.x, rect.y, rect.width, rect.height);
+            sprite.setOrigin(1/3 * c, 1/3 * r); // origin is top left corner of piece
+            sprite.setPosition(position.x, position.y);
+            sprite.setSize(this.pieceWidth, this.pieceHeight);
+            sprite.setInteractive(
+                rect,
+                Phaser.Geom.Rectangle.Contains
+            );    
+            ++index;
+        }
+    }
     this.syncPuzzleWithBoard();
 }
 
