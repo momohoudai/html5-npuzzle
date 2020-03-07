@@ -9,7 +9,8 @@ var config = {
     },
     scene: {
         preload: preload,
-        create: create
+        create: create,
+        update: update
     }
 };
 var board;
@@ -25,5 +26,8 @@ function create()
     board.init()
 }
 
+function update() {
+    board.update();
+}
 
 new Phaser.Game(config);

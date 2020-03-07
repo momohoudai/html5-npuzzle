@@ -21,6 +21,10 @@ function Board(game, x, y, w, size, puzzleCount) {
     this.originalPuzzle = new NPuzzle();
     this.movesTaken = 0;
     this.movesTakenText = null;
+    
+    // states
+    this.isSolving = false;
+    this.isAnimating = false;
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -49,7 +53,7 @@ Board.prototype.load = function() {
 
 
 Board.prototype.movePiece = function(spriteId) {
-
+    let parent = this;
     // find the sprite with the correct index
     let sprite = this.puzzlePieces[spriteId];
     if (this.npuzzle.isMovePossible(sprite.place)) {
@@ -65,8 +69,12 @@ Board.prototype.movePiece = function(spriteId) {
             x           : holePosition.x,
             y           : holePosition.y,
             ease        : 'Cubic',
-            duration    : 300,
+            duration    : 200,
+            onComplete: function() {
+                parent.isAnimating =  false;
+            }
         });
+        this.isAnimating = true;
 
         //sprite.setPosition(holeSprite.x, holeSprite.y);
         holeSprite.setPosition(spritePosition.x, spritePosition.y);
@@ -120,7 +128,8 @@ Board.prototype.init = function() {
             
             
             sprite.on('pointerdown', () => {
-                this.movePiece(sprite.id);
+                if (this.isSolving == false)
+                    this.movePiece(sprite.id);
             });
 
             // Finally set the size to the appropriate size
@@ -145,10 +154,11 @@ Board.prototype.init = function() {
     newButton.setPosition(this.x + this.w * 0.2, this.y + this.h * 0.875)
     newButton.setInteractive();
     newButton.on('pointerdown', function() {
-        parent.generate()
         newButton.setFrame(1)
     });
     newButton.on('pointerup', function() {
+        parent.generate();
+        parent.isSolving = false;
         newButton.setFrame(0)
     });
     newButton.on('pointerout', function() {
@@ -162,10 +172,12 @@ Board.prototype.init = function() {
         parent.reset()
         resetButton.setFrame(1)
     });
-    newButton.on('pointerup', function() {
+    resetButton.on('pointerup', function() {
+        parent.reset()
+        parent.isSolving = false;
         resetButton.setFrame(0)
     });
-    newButton.on('pointerout', function() {
+    resetButton.on('pointerout', function() {
         resetButton.setFrame(0)
     });
 
@@ -174,10 +186,12 @@ Board.prototype.init = function() {
     solveButton.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
     solveButton.setInteractive();
     solveButton.on('pointerdown', function() {
-        parent.reset()
         solveButton.setFrame(1)
     });
     solveButton.on('pointerup', function() {
+        if (parent.isSolving == false) {
+            parent.solve();
+        }
         solveButton.setFrame(0)
     });
     solveButton.on('pointerout', function() {
@@ -188,11 +202,31 @@ Board.prototype.init = function() {
     this.generate();
 }
 
+Board.prototype.update = function() {
+   
+    if (this.answers && this.answers.length > 0) {
+        if (!this.isAnimating) {
+            let currentNode = this.answers.shift();
+            this.movePiece(this.npuzzle.state[currentNode.holeIndex]);
+            if (this.answers.length == 0) {
+                this.isSolving = false;
+            }
+        }
+    }
+}
+Board.prototype.solve = function() {
+    this.answers = this.npuzzle.solve();
+    if (this.answers && this.answers.length > 0) {
+        this.isSolving = true;
+    }
+}
+
 Board.prototype.generate = function() {
     this.npuzzle.init(this.size)
-    this.npuzzle.generateSimple();
+    this.npuzzle.generate();
     this.syncPuzzleWithBoard();
 }
+
 
 Board.prototype.reset = function() {
     this.npuzzle.reset();
