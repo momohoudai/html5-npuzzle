@@ -49,6 +49,8 @@ Board.prototype.load = function() {
         )
     }
     this.game.load.spritesheet('button_new', 'assets/button/button_new.png', {frameWidth:128,frameHeight:128})
+    this.game.load.spritesheet('button_reset', 'assets/button/button_reset.png', {frameWidth:128,frameHeight:128})
+    this.game.load.spritesheet('button_solve', 'assets/button/button_solve.png', {frameWidth:128,frameHeight:128})
 }
 
 
@@ -165,7 +167,7 @@ Board.prototype.init = function() {
         newButton.setFrame(0)
     });
 
-    let resetButton = this.game.add.sprite(0, 0, 'button_new');
+    let resetButton = this.game.add.sprite(0, 0, 'button_reset');
     resetButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.875)
     resetButton.setInteractive();
     resetButton.on('pointerdown', function() {
@@ -182,7 +184,7 @@ Board.prototype.init = function() {
     });
 
 
-    let solveButton = this.game.add.sprite(0, 0, 'button_new');
+    let solveButton = this.game.add.sprite(0, 0, 'button_solve');
     solveButton.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
     solveButton.setInteractive();
     solveButton.on('pointerdown', function() {
@@ -234,7 +236,6 @@ Board.prototype.reset = function() {
 }
 
 Board.prototype.syncPuzzleWithBoard = function() {
-   
     for (let i = 0; i < this.npuzzle.state.length; ++i) {
         let sprite = this.puzzlePieces[this.npuzzle.state[i]];
         
