@@ -15,7 +15,7 @@ function Board(game, x, y, w, size, puzzleCount) {
     this.puzzleCount = puzzleCount;
     this.puzzlePieces = [];
     this.puzzleX = this.x + this.w * 0.5;
-    this.puzzleY = this.y + this.h * 0.375;
+    this.puzzleY = this.y + this.h * 0.45;
 
     this.npuzzle = new NPuzzle();
     this.originalPuzzle = new NPuzzle();
@@ -26,6 +26,10 @@ function Board(game, x, y, w, size, puzzleCount) {
     this.isSolving = false;
     this.isAnimating = false;
     this.answers = []
+
+    this.preloadText = null;
+    this.puzzleOverlay = null;
+    this.puzzleOverlayText = null;
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -52,6 +56,25 @@ Board.prototype.load = function() {
     this.game.load.spritesheet('button_new', 'assets/button/button_new.png', {frameWidth:128,frameHeight:128})
     this.game.load.spritesheet('button_reset', 'assets/button/button_reset.png', {frameWidth:128,frameHeight:128})
     this.game.load.spritesheet('button_solve', 'assets/button/button_solve.png', {frameWidth:128,frameHeight:128})
+
+    // set preload text
+    this.preloadText = this.game.add.text(this.x * this.h * 0.5, this.y + this.h * 0.5, 'Loading...', { 
+        fontFamily: 'courier',
+        fontSize: this.w * 0.1,
+        align: "center",
+        color: "#ffffff",
+        fixedWidth: this.w - this.x
+    });
+
+    this.game.scene.scene.tweens.add({
+        targets     : this.preloadText,
+        alpha       : 0,
+        yoyo        : true,
+        ease        : 'Linear',
+        duration    : 1000,
+        repeat      : -1,
+    });
+
 }
 
 
@@ -98,7 +121,7 @@ Board.prototype.checkSolved = function() {
             targets     : holePiece,
             alpha       : 1,
             ease        : 'Cubic',
-            duration    : 2000,
+            duration    : 1000,
         });
 
         // disable interaction for all sprites
@@ -108,8 +131,12 @@ Board.prototype.checkSolved = function() {
 }
 
 Board.prototype.init = function() {
-    // Puzzle Board
-   
+    // Remove preload stuff
+    this.game.tweens.killTweensOf(this.preloadText);
+    this.preloadText.destroy()
+
+
+
     let parent = this;
     this.puzzlePieces.length = 0; // clears the array
     let index = 0;
@@ -120,7 +147,6 @@ Board.prototype.init = function() {
             let sprite = this.game.add.sprite(0, 0);
             // Cropping does not change the position, size and anchor of the sprite.
             // So we must set those manually to fit the actual sprite size we want...
-            let rect = new Phaser.Geom.Rectangle(c * sprite.width / this.size, r * sprite.height / this.size, sprite.width / this.size, sprite.height / this.size);
             sprite.id = index;
             sprite.place = index;
   
@@ -136,9 +162,9 @@ Board.prototype.init = function() {
     }
 
     // Text
-    this.movesTakenText = this.game.add.text(this.x, this.y + this.h * 0.7, 'Hello', { 
-        fontFamily: 'Verdana',
-        fontSize: this.w * 0.075,
+    this.movesTakenText = this.game.add.text(this.x, this.y + this.h * 0.05, 'Hello', { 
+        fontFamily: 'Calibri',
+        fontSize: this.w * 0.1,
         align: "center",
         color: "#ffff00",
         fixedWidth: this.w - this.x
@@ -152,9 +178,10 @@ Board.prototype.init = function() {
         newButton.setFrame(1)
     });
     newButton.on('pointerup', function() {
-        parent.generate();
-        parent.isSolving = false;
-        parent.answers.length = 0;
+        if (!parent.isSolving) {
+            parent.generate();
+        }
+        
         newButton.setFrame(0)
     });
     newButton.on('pointerout', function() {
@@ -168,9 +195,9 @@ Board.prototype.init = function() {
         resetButton.setFrame(1)
     });
     resetButton.on('pointerup', function() {
-        parent.reset()
-        parent.isSolving = false;
-        parent.answers.length = 0;
+        if (!parent.isSolving) {
+            parent.reset();
+        }
         resetButton.setFrame(0)
     });
     resetButton.on('pointerout', function() {
@@ -185,7 +212,7 @@ Board.prototype.init = function() {
         solveButton.setFrame(1)
     });
     solveButton.on('pointerup', function() {
-        if (parent.isSolving == false) {
+        if (parent.isSolving == false && !parent.npuzzle.isSolved()) {
             parent.solve();
         }
         solveButton.setFrame(0)
@@ -195,6 +222,31 @@ Board.prototype.init = function() {
     });
 
 
+    // Puzzle Overlay for solving
+    this.puzzleOverlay = this.game.add.graphics();
+    this.puzzleOverlay.fillStyle(0x000000, 0.7)
+    this.puzzleOverlay.fillRect(this.puzzleX - this.puzzleWidth/2, this.puzzleY - this.puzzleHeight/2, this.puzzleWidth, this.puzzleHeight)
+
+    // set preload text
+    this.puzzleOverlayText = this.game.add.text(this.puzzleX - this.puzzleWidth/2, this.puzzleY, 'Solving', { 
+        fontFamily: 'courier',
+        fontSize: this.w * 0.1,
+        align: "center",
+        color: "#ffffff",
+        fixedWidth: this.puzzleWidth
+    });
+    this.game.scene.scene.tweens.add({
+        targets     : this.puzzleOverlayText,
+        alpha       : 0,
+        yoyo        : true,
+        ease        : 'Linear',
+        duration    : 1000,
+        repeat      : -1,
+    });
+    this.puzzleOverlay.visible = false;
+    this.puzzleOverlayText.visible = false;
+
+        
     this.generate();
 }
 
@@ -212,7 +264,12 @@ Board.prototype.update = function() {
 }
 Board.prototype.solve = function() {
     this.answers = this.npuzzle.solve();
+    this.puzzleOverlay.visible = true;
+    this.puzzleOverlayText.visible = true;
+    
     if (this.answers && this.answers.length > 0) {
+        this.puzzleOverlay.visible = false;
+        this.puzzleOverlayText.visible = false;
         this.isSolving = true;
     }
 }
@@ -222,8 +279,7 @@ Board.prototype.generate = function() {
     this.npuzzle.generate();
     let puzzlePieceKey = 'puzzle_' + Math.floor(Math.random() * (this.puzzleCount + 1));
     let index = 0;
-    let texture = this.game.textures.get(puzzlePieceKey)
-    console.log()
+    let texture = this.game.textures.get(puzzlePieceKey);
     for (let r = 0; r < this.size; ++r) {
         for (let c = 0; c < this.size; ++c) {       
             let position = this.getCoordByIndex(index);
