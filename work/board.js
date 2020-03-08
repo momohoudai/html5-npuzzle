@@ -28,8 +28,13 @@ function Board(game, x, y, w, size, puzzleCount) {
     this.answers = []
 
     this.preloadText = null;
-    this.puzzleOverlay = null;
-    this.puzzleOverlayText = null;
+    //this.puzzleOverlay = null;
+    //this.puzzleOverlayText = null;
+
+    // buttons
+    this.buttonNew = null;
+    this.buttonReset = null;
+    this.buttonSolve = null;
 }
 
 Board.prototype.getCoordByIndex = function(index) {
@@ -116,12 +121,19 @@ Board.prototype.movePiece = function(spriteId) {
 
 Board.prototype.checkSolved = function() {
     if (this.npuzzle.isSolved()) {
+        let parent = this;
         let holePiece = this.puzzlePieces[this.npuzzle.getHoleValue()];
         this.game.scene.scene.tweens.add({
             targets     : holePiece,
             alpha       : 1,
             ease        : 'Cubic',
             duration    : 1000,
+            onComplete : function() {
+                parent.isSolving = false;
+                parent.buttonNew.setFrame(0);
+                parent.buttonReset.setFrame(0);
+                parent.buttonSolve.setFrame(2);
+            }
         });
 
         // disable interaction for all sprites
@@ -171,59 +183,77 @@ Board.prototype.init = function() {
     });
 
     // Buttons
-    let newButton = this.game.add.sprite(0, 0, 'button_new');
-    newButton.setPosition(this.x + this.w * 0.2, this.y + this.h * 0.875)
-    newButton.setInteractive();
-    newButton.on('pointerdown', function() {
-        newButton.setFrame(1)
+    this.buttonNew = this.game.add.sprite(0, 0, 'button_new');
+    this.buttonNew.setPosition(this.x + this.w * 0.2, this.y + this.h * 0.875)
+    this.buttonNew.setInteractive();
+    this.buttonNew.on('pointerdown', function() {
+        if (!parent.isSolving) {
+            this.setFrame(1)
+        }
     });
-    newButton.on('pointerup', function() {
+    this.buttonNew.on('pointerup', function() {
         if (!parent.isSolving) {
             parent.generate();
+            parent.buttonReset.setFrame(0);
+            parent.buttonSolve.setFrame(0);
+            this.setFrame(0)
         }
         
-        newButton.setFrame(0)
     });
-    newButton.on('pointerout', function() {
-        newButton.setFrame(0)
+    this.buttonNew.on('pointerout', function() {
+        if (!parent.isSolving) {
+            this.setFrame(0)
+        }
     });
 
-    let resetButton = this.game.add.sprite(0, 0, 'button_reset');
-    resetButton.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.875)
-    resetButton.setInteractive();
-    resetButton.on('pointerdown', function() {
-        resetButton.setFrame(1)
+    this.buttonReset = this.game.add.sprite(0, 0, 'button_reset');
+    this.buttonReset.setPosition(this.x + this.w * 0.5, this.y + this.h * 0.875)
+    this.buttonReset.setInteractive();
+    this.buttonReset.on('pointerdown', function() {
+        if (!parent.isSolving) {
+            this.setFrame(1)
+        }
     });
-    resetButton.on('pointerup', function() {
+    this.buttonReset.on('pointerup', function() {
         if (!parent.isSolving) {
             parent.reset();
+            parent.buttonNew.setFrame(0);
+            parent.buttonSolve.setFrame(0);
+            this.setFrame(0);
         }
-        resetButton.setFrame(0)
+        
     });
-    resetButton.on('pointerout', function() {
-        resetButton.setFrame(0)
+    this.buttonReset.on('pointerout', function() {
+        if (!parent.isSolving) {
+            this.setFrame(0)
+        }
     });
 
 
-    let solveButton = this.game.add.sprite(0, 0, 'button_solve');
-    solveButton.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
-    solveButton.setInteractive();
-    solveButton.on('pointerdown', function() {
-        solveButton.setFrame(1)
+    this.buttonSolve = this.game.add.sprite(0, 0, 'button_solve');
+    this.buttonSolve.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
+    this.buttonSolve.setInteractive();
+    this.buttonSolve.on('pointerdown', function() {
+        if (!parent.isSolving) 
+            this.setFrame(1)
     });
-    solveButton.on('pointerup', function() {
+    this.buttonSolve.on('pointerup', function() {
         if (parent.isSolving == false && !parent.npuzzle.isSolved()) {
             parent.solve();
+            parent.buttonNew.setFrame(2);
+            parent.buttonReset.setFrame(2);
+            this.setFrame(2)
         }
-        solveButton.setFrame(0)
+        
     });
-    solveButton.on('pointerout', function() {
-        solveButton.setFrame(0)
+    this.buttonSolve.on('pointerout', function() {
+        if (!parent.isSolving)
+            this.setFrame(0)
     });
 
 
     // Puzzle Overlay for solving
-    this.puzzleOverlay = this.game.add.graphics();
+    /*this.puzzleOverlay = this.game.add.graphics();
     this.puzzleOverlay.fillStyle(0x000000, 0.7)
     this.puzzleOverlay.fillRect(this.puzzleX - this.puzzleWidth/2, this.puzzleY - this.puzzleHeight/2, this.puzzleWidth, this.puzzleHeight)
 
@@ -244,7 +274,7 @@ Board.prototype.init = function() {
         repeat      : -1,
     });
     this.puzzleOverlay.visible = false;
-    this.puzzleOverlayText.visible = false;
+    this.puzzleOverlayText.visible = false;*/
 
         
     this.generate();
@@ -256,21 +286,19 @@ Board.prototype.update = function() {
         if (!this.isAnimating) {
             let currentNode = this.answers.shift();
             this.movePiece(this.npuzzle.state[currentNode.holeIndex]);
-            if (this.answers.length == 0) {
-                this.isSolving = false;
-            }
         }
     }
 }
 Board.prototype.solve = function() {
     this.answers = this.npuzzle.solve();
-    this.puzzleOverlay.visible = true;
-    this.puzzleOverlayText.visible = true;
+    //this.puzzleOverlay.visible = true;
+    //this.puzzleOverlayText.visible = true;
     
     if (this.answers && this.answers.length > 0) {
-        this.puzzleOverlay.visible = false;
-        this.puzzleOverlayText.visible = false;
+        //this.puzzleOverlay.visible = false;
+        //this.puzzleOverlayText.visible = false;
         this.isSolving = true;
+
     }
 }
 
