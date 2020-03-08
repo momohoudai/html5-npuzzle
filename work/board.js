@@ -234,7 +234,7 @@ Board.prototype.init = function() {
     this.buttonSolve.setPosition(this.x + this.w * 0.8, this.y + this.h * 0.875)
     this.buttonSolve.setInteractive();
     this.buttonSolve.on('pointerdown', function() {
-        if (!parent.isSolving) 
+        if (!parent.isSolving && !parent.npuzzle.isSolved()) 
             this.setFrame(1)
     });
     this.buttonSolve.on('pointerup', function() {
@@ -247,16 +247,16 @@ Board.prototype.init = function() {
         
     });
     this.buttonSolve.on('pointerout', function() {
-        if (!parent.isSolving)
+        if (!parent.isSolving && !parent.npuzzle.isSolved())
             this.setFrame(0)
     });
 
-    this.game.add.text(0, this.h - 30, "Art by @hikaika_guu", { 
+    this.game.add.text(0, 0, "Art by @hikaika_guu", { 
         fontFamily: 'calibri',
         fontSize: this.w * 0.025,
         align: "right",
         color: "#ffffff",
-        fixedWidth: this.w
+        fixedWidth: this.puzzleX + this.puzzleWidth
     });
 
     // Puzzle Overlay for solving
