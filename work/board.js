@@ -15,7 +15,7 @@ function Board(game, x, y, w, size, puzzleCount) {
     this.puzzleCount = puzzleCount;
     this.puzzlePieces = [];
     this.puzzleX = this.x + this.w * 0.5;
-    this.puzzleY = this.y + this.h * 0.45;
+    this.puzzleY = this.y + this.h * 0.425;
 
     this.npuzzle = new NPuzzle();
     this.originalPuzzle = new NPuzzle();
@@ -174,7 +174,7 @@ Board.prototype.init = function() {
     }
 
     // Text
-    this.movesTakenText = this.game.add.text(this.x, this.y + this.h * 0.05, 'Hello', { 
+    this.movesTakenText = this.game.add.text(this.x, this.y + this.h * 0.025, 'Hello', { 
         fontFamily: 'Calibri',
         fontSize: this.w * 0.1,
         align: "center",
@@ -251,7 +251,7 @@ Board.prototype.init = function() {
             this.setFrame(0)
     });
 
-    this.game.add.text(this.puzzleX - this.puzzleWidth/2, this.puzzleY + this.puzzleHeight/2, "Art by @hikaika_guu", { 
+    this.game.add.text(this.puzzleX - this.puzzleWidth/2, this.puzzleY + this.puzzleHeight/2, "Art by @hikaika_guu\nProgram by @momohoudai", { 
         fontFamily: 'calibri',
         fontSize: this.w * 0.025,
         align: "right",
