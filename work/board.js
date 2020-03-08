@@ -251,12 +251,12 @@ Board.prototype.init = function() {
             this.setFrame(0)
     });
 
-    this.game.add.text(0, 0, "Art by @hikaika_guu", { 
+    this.game.add.text(this.puzzleX - this.puzzleWidth/2, this.puzzleY + this.puzzleHeight/2, "Art by @hikaika_guu", { 
         fontFamily: 'calibri',
         fontSize: this.w * 0.025,
         align: "right",
         color: "#ffffff",
-        fixedWidth: this.puzzleX + this.puzzleWidth
+        fixedWidth: this.puzzleWidth
     });
 
     // Puzzle Overlay for solving
