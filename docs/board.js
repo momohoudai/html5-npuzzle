@@ -51,7 +51,7 @@ Board.prototype.getCoordByIndex = function(index) {
 }
 
 Board.prototype.load = function() {
-    this.game.load.setBaseURL('https://momodevelop.gitlab.io/html5-npuzzle/')    
+    this.game.load.setBaseURL('https://momodevelop.github.io/html5-npuzzle/')    
     for (let i = 0; i <= this.puzzleCount; ++i) {
         this.game.load.image(
             'puzzle_' + i, 
