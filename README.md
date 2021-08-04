@@ -14,7 +14,7 @@ The game is avalible to play at: https://momodevelop.github.io/html5-npuzzle/
 
 
 
-![alt text](https://github.com/momodevelop/html5-npuzzle/-/raw/master/work/assets/help.jpg)
+![alt text](https://momodevelop.github.io/html5-npuzzle/assets/help.jpg
 
 
 1.  Create a new board.
