@@ -5,7 +5,7 @@ This is mostly just a project for me to get familiarized with HTML5.
 It is a simple N-Puzzle demo, nothing more.
 The N-Puzzle is a sliding puzzle that consists of a frame of numbered square tiles in random order with one tile missed.
 
-The game is avalible to play at: https://momodevelop.github.io/html5-npuzzle/
+The game is avalible to play at: https://momohoudai.github.io/html5-npuzzle/
 
 # How to use?
 
@@ -14,7 +14,7 @@ The game is avalible to play at: https://momodevelop.github.io/html5-npuzzle/
 
 
 
-![alt text](https://momodevelop.github.io/html5-npuzzle/assets/help.jpg)
+![alt text](https://momohoudai.github.io/html5-npuzzle/assets/help.jpg)
 
 
 1.  Create a new board.
